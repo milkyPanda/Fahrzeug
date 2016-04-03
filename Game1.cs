@@ -26,6 +26,7 @@ namespace gridgame
         int Wurstbase = 20;
         bool is_draw_needed = true;
         int coincounter = 0;
+        int framecounter = 0;
 
 
         public Game1()
@@ -64,7 +65,7 @@ namespace gridgame
             Coin.Load(GraphicsDevice, Color.Yellow);
             
             //create and load enemy
-            this.enemy = new Rechteck(r.Next(0, 15), r.Next(0, 15), gridwidth, gridheight);
+            this.enemy = new Rechteck(0, 0, gridwidth, gridheight);
             enemy.Load(GraphicsDevice, Color.Red);
         }
 
@@ -102,37 +103,46 @@ namespace gridgame
                 Wurst.move_right();
             }
 
-            //move the enemy
-            Random r = new Random();
-            int x = r.Next(-1, 1);
-            int y = r.Next(-1, 1);
-            switch(x)
+            //move the enemy 3 times per second
+            if(framecounter == 10)
             {
-                case -1:
+                Random r = new Random();
+                int x = r.Next(-1, 1);
+                int y = r.Next(-1, 1);
+                switch(x)
                 {
-                    enemy.move_left();
-                    break;
+                    case -1:
+                    {
+                        enemy.move_left();
+                        break;
+                    }
+                    case 1:
+                    {
+                        enemy.move_right();
+                        break;
+                    }
+                    default: break;
                 }
-                case 1:
+                switch(y)
                 {
-                    enemy.move_right();
-                    break;
+                    case -1:
+                    {
+                        enemy.move_up();
+                        break;
+                    }
+                    case 1:
+                    {
+                        enemy.move_down();
+                        break;
+                    }
+                    default: break;
                 }
-                default: break;
+                
+                framecounter = 0;
             }
-            switch(y)
+            else
             {
-                case -1:
-                {
-                    enemy.move_up();
-                    break;
-                }
-                case 1:
-                {
-                    enemy.move_down();
-                    break;
-                }
-                default: break;
+                framecounter++;
             }
 
             if( Wurst.collision(Coin) )
