@@ -66,7 +66,7 @@ namespace gridgame
             Coin.Load(GraphicsDevice, Color.Yellow);
             
             //create and load enemy
-            this.enemy = new Rechteck(0, 0, gridwidth, gridheight);
+            this.enemy = new Rechteck(r.Next(0, 15), r.Next(0, 15), gridwidth, gridheight);
             enemy.Load(GraphicsDevice, Color.Red);
         }
 
@@ -107,12 +107,35 @@ namespace gridgame
             //move the enemy 3 times per second
             if(framecounter == 10)
             {
-                Random r = new Random();
-                int x = r.Next(-1, 1);
-                int y = r.Next(-1, 1);
-                switch(x)
+                int move;
+                bool again = false;
+
+                Random X = new Random();
+                do
                 {
-                    case -1:
+                    move = X.Next(-1, 8);
+                    if (move % 2 == 0)  //even number
+                    {
+                        if (enemy.lastmove == move+1)
+                        {
+                            again = true;
+                        }
+                        else again = false;
+                    }
+                    if (move % 2 == 1)
+                    {
+                        if (enemy.lastmove == move - 1)
+                        {
+                            again = true;
+                        }
+                        else again = false;
+                    }
+                }
+                while (again);
+                enemy.lastmove = move;
+                switch(move)
+                {
+                    case 0:
                     {
                         enemy.move_left();
                         break;
@@ -122,18 +145,38 @@ namespace gridgame
                         enemy.move_right();
                         break;
                     }
-                    default: break;
-                }
-                switch(y)
-                {
-                    case -1:
+                    case 2:
                     {
                         enemy.move_up();
                         break;
                     }
-                    case 1:
+                    case 3:
                     {
                         enemy.move_down();
+                        break;
+                    }
+                    case 4:
+                    {
+                        enemy.move_left();
+                        enemy.move_up();
+                        break;
+                    }
+                    case 5:
+                    {
+                        enemy.move_right();
+                        enemy.move_down();
+                        break;
+                    }
+                    case 6:
+                    {
+                        enemy.move_right();
+                        enemy.move_up();
+                        break;
+                    }
+                    case 7:
+                    {
+                        enemy.move_left();
+                        enemy.move_up();
                         break;
                     }
                     default: break;
@@ -155,7 +198,6 @@ namespace gridgame
 
             if (Wurst.collision(enemy))
             {
-                Coin.reposition();
                 lose = true;
             }
             
@@ -178,7 +220,7 @@ namespace gridgame
                 //draw wurst
                 spriteBatch.Draw(Wurst.Recht, new Rectangle(gamegrid.x_pixpos(Wurst.get_Xpos()), gamegrid.y_pixpos(Wurst.get_Ypos()), Wurstbase, Wurstbase), Color.White);
                 //draw enemy
-                spriteBatch.Draw(enemy.Recht, new Rectangle(gamegrid.x_pixpos(enemy.get_Xpos), gamegrid.y_pixpos(enemy.get_Xpos()), Wurstbase, Wurstbase), Color.Red);
+                spriteBatch.Draw(enemy.Recht, new Rectangle(gamegrid.x_pixpos(enemy.get_Xpos()), gamegrid.y_pixpos(enemy.get_Ypos()), Wurstbase, Wurstbase), Color.Red);
                 spriteBatch.End();
             }
             else if (lose == true)

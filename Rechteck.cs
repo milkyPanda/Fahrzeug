@@ -19,6 +19,7 @@ namespace gridgame
         int Ypos;
         int gridwidth;
         int gridheight;
+        public int lastmove;
 
 
         public Rechteck(int Xpos, int Ypos, int gridwidth, int gridheight)
