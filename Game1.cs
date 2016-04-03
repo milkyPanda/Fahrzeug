@@ -18,6 +18,7 @@ namespace gridgame
         SpriteBatch spriteBatch;
         InputHandle es_mi_regal;
         Rechteck Wurst;
+        Rechteck Coin;
         Grid gamegrid;
         int gridwidth;
         int gridheight;
@@ -50,7 +51,10 @@ namespace gridgame
             this.gamegrid = new Grid(GraphicsDevice, gridwidth, gridheight, Wurstbase);
             this.es_mi_regal = new InputHandle();
             this.Wurst = new Rechteck(14,14);
-            Rechteck.Load(GraphicsDevice);
+            this.Coin = new Rechteck(0, 0);
+            Wurst.Load(GraphicsDevice,Color.White);
+            Coin.Load(GraphicsDevice,Color.Yellow);
+
         }
 
         protected override void UnloadContent()
@@ -98,8 +102,8 @@ namespace gridgame
             //Draw the grid
             spriteBatch.Begin();
             spriteBatch.Draw(gamegrid.get_grid(), grid, Color.Black);
-
-            spriteBatch.Draw(Rechteck.Recht,Size, Color.White);
+            spriteBatch.Draw(Coin.Recht, new Rectangle(Coin.Xpos, Coin.Ypos, Wurstbase, Wurstbase), Color.Yellow);
+            spriteBatch.Draw(Wurst.Recht,Size, Color.White);
             spriteBatch.End();
 
             base.Draw(gameTime);

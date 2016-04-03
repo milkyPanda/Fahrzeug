@@ -13,7 +13,7 @@ namespace gridgame
 {
     public class Rechteck
     {
-        public static Texture2D Recht; 
+        public Texture2D Recht;
         public int Xpos = 0;
         public int Ypos = 0;
 
@@ -21,17 +21,15 @@ namespace gridgame
         {
             this.Xpos = Xpos;
             this.Ypos = Ypos;
-        }   
+        }
 
 
-        public static void Load(GraphicsDevice GD)
+        public void Load(GraphicsDevice GD, Color Colo)
         {
             Recht = new Texture2D(GD, 1, 1);
             Color[] Col = new Color[1];
-            Col[0] = Color.White;
+            Col[0] = Colo;
             Recht.SetData(Col);
-            
-        
         }
     }
 }
