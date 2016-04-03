@@ -50,7 +50,7 @@ namespace gridgame
             this.gamegrid = new Grid(GraphicsDevice, gridwidth, gridheight, Wurstbase);
             this.es_mi_regal = new InputHandle();
             this.Wurst = new Rechteck(14,14);
-            Rechteck.Load(GraphicsDevice);
+            Wurst.Load(GraphicsDevice);
         }
 
         protected override void UnloadContent()
@@ -84,6 +84,12 @@ namespace gridgame
             if (es_mi_regal.wasKeyPressed(Keys.D) && Wurst.Xpos < gridheight-1)
             {
                 Wurst.Xpos++;
+            }
+            
+            //check if Wurst hits the coin
+            if( Wurst.XPos == Coin.Xpos && Wurst.YPos == Coin.YPos)
+            {
+                Coin.reposition();
             }
 
             base.Update(gameTime);

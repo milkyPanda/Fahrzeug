@@ -24,14 +24,19 @@ namespace gridgame
         }   
 
 
-        public static void Load(GraphicsDevice GD)
+        public void Load(GraphicsDevice GD)
         {
             Recht = new Texture2D(GD, 1, 1);
             Color[] Col = new Color[1];
             Col[0] = Color.White;
             Recht.SetData(Col);
-            
+        }
         
+        public void reposition()
+        {
+            Random r = new Random();
+            this.XPos = r.Next(0, 15);
+            this.YPos = r.Next(0, 15);
         }
     }
 }
