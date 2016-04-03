@@ -1,3 +1,16 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.GamerServices;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
+
+
+
 namespace gridgame
 {
     class Grid     //defaults to an internal class
@@ -14,7 +27,7 @@ namespace gridgame
             this.width = w;
             this.height = h;
             this.fieldwidth = fieldwidth;
-            gridtex = new Texture2D(dev, w*fieldwidth + (w+1)*spacewidth, h*fieldwidth + (h+1)*fieldheight );
+            gridtex = new Texture2D(dev, w*fieldwidth + (w+1)*spacewidth, h*fieldwidth + (h+1)*fieldwidth );
         }
         
         public Texture2D get_grid()
