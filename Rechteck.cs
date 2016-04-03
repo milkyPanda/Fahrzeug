@@ -16,6 +16,7 @@ namespace gridgame
         public Texture2D Recht;
         public int Xpos = 0;
         public int Ypos = 0;
+        
 
         public Rechteck(int Xpos, int Ypos)
         {
@@ -24,12 +25,22 @@ namespace gridgame
         }
 
 
+
         public void Load(GraphicsDevice GD, Color Colo)
         {
             Recht = new Texture2D(GD, 1, 1);
             Color[] Col = new Color[1];
             Col[0] = Colo;
             Recht.SetData(Col);
+
+        }
+
+        
+        public void reposition()
+        {
+            Random r = new Random();
+            this.Xpos = r.Next(0, 15);
+            this.Ypos = r.Next(0, 15);
         }
     }
 }

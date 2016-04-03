@@ -23,7 +23,9 @@ namespace gridgame
         int gridwidth;
         int gridheight;
         int Wurstbase = 20;
-        
+        bool is_draw_needed = true;
+        int coincounter = 0;
+
 
         public Game1()
         {
@@ -51,9 +53,11 @@ namespace gridgame
             this.gamegrid = new Grid(GraphicsDevice, gridwidth, gridheight, Wurstbase);
             this.es_mi_regal = new InputHandle();
             this.Wurst = new Rechteck(14,14);
+
             this.Coin = new Rechteck(0, 0);
             Wurst.Load(GraphicsDevice,Color.White);
             Coin.Load(GraphicsDevice,Color.Yellow);
+
 
         }
 
@@ -89,7 +93,19 @@ namespace gridgame
             {
                 Wurst.Xpos++;
             }
-
+            
+            //check if Wurst hits the coin
+            if( Wurst.Xpos == Coin.Xpos && Wurst.Ypos == Coin.Ypos)
+            {
+                Coin.reposition();
+                coincounter++;
+            }
+            
+            
+            if (coincounter >= 10)
+            {
+                is_draw_needed = false;
+            }
             base.Update(gameTime);
         }
 
@@ -98,14 +114,20 @@ namespace gridgame
             GraphicsDevice.Clear(Color.CornflowerBlue);
             Rectangle Size = new Rectangle(gamegrid.get_x_pixel_pos(Wurst.Xpos),gamegrid.get_y_pixel_pos(Wurst.Ypos),Wurstbase,Wurstbase);
             Rectangle grid = new Rectangle(0, 0, gamegrid.pixWidth(), gamegrid.pixHeight());
-            
-            //Draw the grid
-            spriteBatch.Begin();
-            spriteBatch.Draw(gamegrid.get_grid(), grid, Color.Black);
-            spriteBatch.Draw(Coin.Recht, new Rectangle(Coin.Xpos, Coin.Ypos, Wurstbase, Wurstbase), Color.Yellow);
-            spriteBatch.Draw(Wurst.Recht,Size, Color.White);
-            spriteBatch.End();
 
+            if (is_draw_needed == true)
+            {
+                //Draw the grid
+                spriteBatch.Begin();
+                spriteBatch.Draw(gamegrid.get_grid(), grid, Color.Black);
+                spriteBatch.Draw(Coin.Recht, new Rectangle(gamegrid.get_x_pixel_pos(Coin.Xpos), gamegrid.get_y_pixel_pos(Coin.Ypos), Wurstbase, Wurstbase), Color.Yellow);
+                spriteBatch.Draw(Wurst.Recht, Size, Color.White);
+                spriteBatch.End();
+            }
+            else
+            {
+                GraphicsDevice.Clear(Color.Green);
+            }
             base.Draw(gameTime);
         }
     }
