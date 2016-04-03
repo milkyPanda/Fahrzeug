@@ -9,11 +9,20 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-namespace WindowsGame3
+namespace gridgame
 {
     public class Rechteck
     {
-        public static Texture2D Recht;
+        public static Texture2D Recht; 
+        public int Xpos = 0;
+        public int Ypos = 0;
+
+        public Rechteck(int Xpos, int Ypos)
+        {
+            this.Xpos = Xpos;
+            this.Ypos = Ypos;
+        }   
+
 
         public static void Load(GraphicsDevice GD)
         {

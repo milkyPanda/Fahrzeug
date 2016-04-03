@@ -41,7 +41,7 @@ namespace gridgame
                 col[i] = Color.Black;
             }
             
-            gridtex.setData(col);
+            gridtex.SetData(col);
 
         }
         
@@ -50,12 +50,12 @@ namespace gridgame
             return gridtex;
         }
         
-        public int pixwidth()
+        public int pixWidth()
         {
             return pixwidth;
         }
         
-        public int pixheight()
+        public int pixHeight()
         {
             return pixheight;
         }

@@ -1,6 +1,6 @@
 using System;
 
-namespace WindowsGame3
+namespace gridgame
 {
 #if WINDOWS || XBOX
     static class Program
