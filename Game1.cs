@@ -16,11 +16,15 @@ namespace WindowsGame3
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        int Height = 20;
+        
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            IsMouseVisible = true;
+
         }
 
 
@@ -34,7 +38,7 @@ namespace WindowsGame3
         {
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            Rechteck.Load(GraphicsDevice);
         }
 
         protected override void UnloadContent()
@@ -55,6 +59,11 @@ namespace WindowsGame3
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
+            Rectangle Size = new Rectangle(0,0,Height,Height);
+
+            spriteBatch.Begin();
+            spriteBatch.Draw(Rechteck.Recht,Size, Color.White);
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
