@@ -168,24 +168,25 @@ namespace gridgame
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-            Rectangle Size = new Rectangle(gamegrid.get_x_pixel_pos(Wurst.get_Xpos()), gamegrid.get_y_pixel_pos(Wurst.get_Ypos()), Wurstbase, Wurstbase);
-            Rectangle grid = new Rectangle(0, 0, gamegrid.pixWidth(), gamegrid.pixHeight());
-
-            if (lose == false && win == false)
+            if (!lose && !win)
             {
-                //Draw the grid
                 spriteBatch.Begin();
-                spriteBatch.Draw(gamegrid.get_grid(), grid, Color.Black);
-                spriteBatch.Draw(Coin.Recht, new Rectangle(gamegrid.get_x_pixel_pos(Coin.get_Xpos()), gamegrid.get_y_pixel_pos(Coin.get_Ypos()), Wurstbase, Wurstbase), Color.Yellow);
-                spriteBatch.Draw(Wurst.Recht, Size, Color.White);
+                //draw grid
+                spriteBatch.Draw(gamegrid.get_grid(), new Rectangle(0, 0, gamegrid.pixWidth(), gamegrid.pixHeight()), Color.Black);
+                //draw coin
+                spriteBatch.Draw(Coin.Recht, new Rectangle(gamegrid.x_pixpos(Coin.get_Xpos()), gamegrid.y_pixpos(Coin.get_Ypos()), Wurstbase, Wurstbase), Color.Yellow);
+                //draw wurst
+                spriteBatch.Draw(Wurst.Recht, new Rectangle(gamegrid.x_pixpos(Wurst.get_Xpos()), gamegrid.y_pixpos(Wurst.get_Ypos()), Wurstbase, Wurstbase), Color.White);
+                //draw enemy
+                spriteBatch.Draw(enemy.Recht, new Rectangle(gamegrid.x_pixpos(enemy.get_Xpos), gamegrid.y_pixpos(enemy.get_Xpos()), Wurstbase, Wurstbase), Color.Red);
                 spriteBatch.End();
             }
             else if (lose == true)
             {
                 GraphicsDevice.Clear(Color.Red);
             }
-            else {
+            else
+            {
                 GraphicsDevice.Clear(Color.Green);
             }
 

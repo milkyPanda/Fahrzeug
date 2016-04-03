@@ -60,12 +60,12 @@ namespace gridgame
             return pixheight;
         }
         
-        public int get_x_pixel_pos(int grid_x_pos)
+        public int x_pixpos(int grid_x_pos)
         {
             return grid_x_pos * fieldwidth;
         }
         
-        public int get_y_pixel_pos(int grid_y_pos)
+        public int y_pixpos(int grid_y_pos)
         {
             return grid_y_pos * fieldwidth;
         }
