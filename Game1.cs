@@ -178,7 +178,7 @@ namespace gridgame
                 //draw wurst
                 spriteBatch.Draw(Wurst.Recht, new Rectangle(gamegrid.x_pixpos(Wurst.get_Xpos()), gamegrid.y_pixpos(Wurst.get_Ypos()), Wurstbase, Wurstbase), Color.White);
                 //draw enemy
-                spriteBatch.Draw(enemy.Recht, new Rectangle(gamegrid.x_pixpos(enemy.get_Xpos), gamegrid.y_pixpos(enemy.get_Xpos()), Wurstbase, Wurstbase), Color.Red);
+                spriteBatch.Draw(enemy.Recht, new Rectangle(gamegrid.x_pixpos(enemy.get_Xpos()), gamegrid.y_pixpos(enemy.get_Xpos()), Wurstbase, Wurstbase), Color.Red);
                 spriteBatch.End();
             }
             else if (lose == true)
