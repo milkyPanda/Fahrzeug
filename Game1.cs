@@ -52,9 +52,9 @@ namespace gridgame
             this.spriteBatch = new SpriteBatch(GraphicsDevice);
             this.gamegrid = new Grid(GraphicsDevice, gridwidth, gridheight, Wurstbase);
             this.es_mi_regal = new InputHandle();
-            this.Wurst = new Rechteck(14,14);
+            this.Wurst = new Rechteck(14,14,gridwidth,gridheight);
 
-            this.Coin = new Rechteck(0, 0);
+            this.Coin = new Rechteck(0, 0,gridwidth,gridheight);
             Wurst.Load(GraphicsDevice,Color.White);
             Coin.Load(GraphicsDevice,Color.Yellow);
 
@@ -73,29 +73,32 @@ namespace gridgame
                 this.Exit();
 
             es_mi_regal.Update();
-
-            if (es_mi_regal.wasKeyPressed(Keys.W) && Wurst.Ypos != 0)
+            
+            //Check if the Wurst needs to be moved
+            if (es_mi_regal.wasKeyPressed(Keys.W) )
             {
-                Wurst.Ypos--;
+                Wurst.move_up();
             }
 
-            if (es_mi_regal.wasKeyPressed(Keys.S) && Wurst.Ypos < gridwidth-1)
+            if (es_mi_regal.wasKeyPressed(Keys.S) )
             {
-                Wurst.Ypos++;
+                Wurst.move_down();
             }
 
-            if (es_mi_regal.wasKeyPressed(Keys.A) && Wurst.Xpos != 0)
-            {
-                Wurst.Xpos--;
+            if (es_mi_regal.wasKeyPressed(Keys.A) ){
+            
+                Wurst.move_left();
             }
 
-            if (es_mi_regal.wasKeyPressed(Keys.D) && Wurst.Xpos < gridheight-1)
+            if (es_mi_regal.wasKeyPressed(Keys.D) )
             {
-                Wurst.Xpos++;
+                Wurst.move_right();
             }
             
-            //check if Wurst hits the coin
-            if( Wurst.Xpos == Coin.Xpos && Wurst.Ypos == Coin.Ypos)
+
+
+            if( Wurst.collision(Coin) )
+
             {
                 Coin.reposition();
                 coincounter++;
@@ -112,7 +115,7 @@ namespace gridgame
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            Rectangle Size = new Rectangle(gamegrid.get_x_pixel_pos(Wurst.Xpos),gamegrid.get_y_pixel_pos(Wurst.Ypos),Wurstbase,Wurstbase);
+            Rectangle Size = new Rectangle(gamegrid.get_x_pixel_pos(Wurst.get_Xpos()), gamegrid.get_y_pixel_pos(Wurst.get_Ypos()), Wurstbase, Wurstbase);
             Rectangle grid = new Rectangle(0, 0, gamegrid.pixWidth(), gamegrid.pixHeight());
 
             if (is_draw_needed == true)
@@ -120,7 +123,7 @@ namespace gridgame
                 //Draw the grid
                 spriteBatch.Begin();
                 spriteBatch.Draw(gamegrid.get_grid(), grid, Color.Black);
-                spriteBatch.Draw(Coin.Recht, new Rectangle(gamegrid.get_x_pixel_pos(Coin.Xpos), gamegrid.get_y_pixel_pos(Coin.Ypos), Wurstbase, Wurstbase), Color.Yellow);
+                spriteBatch.Draw(Coin.Recht, new Rectangle(gamegrid.get_x_pixel_pos(Coin.get_Xpos()), gamegrid.get_y_pixel_pos(Coin.get_Ypos()), Wurstbase, Wurstbase), Color.Yellow);
                 spriteBatch.Draw(Wurst.Recht, Size, Color.White);
                 spriteBatch.End();
             }
