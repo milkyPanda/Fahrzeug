@@ -24,7 +24,8 @@ namespace gridgame
         int gridwidth;
         int gridheight;
         int Wurstbase = 20;
-        bool is_draw_needed = true;
+        bool win = false;
+        bool lose = false;
         int coincounter = 0;
         int framecounter = 0;
 
@@ -151,11 +152,16 @@ namespace gridgame
                 Coin.reposition();
                 coincounter++;
             }
-            
+
+            /*if (Wurst.collision(enemy))
+            {
+                Coin.reposition();
+                lose = true;
+            }*/
             
             if (coincounter >= 10)
             {
-                is_draw_needed = false;
+                win = true;
             }
             base.Update(gameTime);
         }
@@ -166,7 +172,7 @@ namespace gridgame
             Rectangle Size = new Rectangle(gamegrid.get_x_pixel_pos(Wurst.get_Xpos()), gamegrid.get_y_pixel_pos(Wurst.get_Ypos()), Wurstbase, Wurstbase);
             Rectangle grid = new Rectangle(0, 0, gamegrid.pixWidth(), gamegrid.pixHeight());
 
-            if (is_draw_needed == true)
+            if (lose == false && win == false)
             {
                 //Draw the grid
                 spriteBatch.Begin();
@@ -175,10 +181,14 @@ namespace gridgame
                 spriteBatch.Draw(Wurst.Recht, Size, Color.White);
                 spriteBatch.End();
             }
-            else
+            else if (lose == true)
             {
+                GraphicsDevice.Clear(Color.Red);
+            }
+            else {
                 GraphicsDevice.Clear(Color.Green);
             }
+
             base.Draw(gameTime);
         }
     }
