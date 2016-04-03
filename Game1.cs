@@ -65,29 +65,30 @@ namespace gridgame
                 this.Exit();
 
             es_mi_regal.Update();
-
-            if (es_mi_regal.wasKeyPressed(Keys.W) && Wurst.Ypos != 0)
+            
+            //Check if the Wurst needs to be moved
+            if (es_mi_regal.wasKeyPressed(Keys.W) )
             {
-                Wurst.Ypos--;
+                Wurst.move_up();
             }
 
-            if (es_mi_regal.wasKeyPressed(Keys.S) && Wurst.Ypos < gridwidth-1)
+            if (es_mi_regal.wasKeyPressed(Keys.S) )
             {
-                Wurst.Ypos++;
+                Wurst.move_down();
             }
 
-            if (es_mi_regal.wasKeyPressed(Keys.A) && Wurst.Xpos != 0)
-            {
-                Wurst.Xpos--;
+            if (es_mi_regal.wasKeyPressed(Keys.A) )
+            
+                Wurst.move_left();
             }
 
-            if (es_mi_regal.wasKeyPressed(Keys.D) && Wurst.Xpos < gridheight-1)
+            if (es_mi_regal.wasKeyPressed(Keys.D) )
             {
-                Wurst.Xpos++;
+                Wurst.move_right();
             }
             
             //check if Wurst hits the coin
-            if( Wurst.XPos == Coin.Xpos && Wurst.YPos == Coin.YPos)
+            if( Wurst.collision(Coin) )
             {
                 Coin.reposition();
             }
