@@ -19,6 +19,7 @@ namespace gridgame
         InputHandle es_mi_regal;
         Rechteck Wurst;
         Rechteck Coin;
+        Rechteck enemy;
         Grid gamegrid;
         int gridwidth;
         int gridheight;
@@ -52,13 +53,19 @@ namespace gridgame
             this.spriteBatch = new SpriteBatch(GraphicsDevice);
             this.gamegrid = new Grid(GraphicsDevice, gridwidth, gridheight, Wurstbase);
             this.es_mi_regal = new InputHandle();
+            
+            //create and load wurst
             this.Wurst = new Rechteck(14,14,gridwidth,gridheight);
-
-            this.Coin = new Rechteck(0, 0,gridwidth,gridheight);
             Wurst.Load(GraphicsDevice,Color.White);
-            Coin.Load(GraphicsDevice,Color.Yellow);
 
-
+            //create and load coin
+            Random r = new Random();
+            this.Coin = new Rechteck(r.Next(0, 15), r.Next(0, 15), gridwidth, gridheight);
+            Coin.Load(GraphicsDevice, Color.Yellow);
+            
+            //create and load enemy
+            this.enemy = new Rechteck(r.Next(0, 15), r.Next(0, 15), gridwidth, gridheight);
+            enemy.Load(GraphicsDevice, Color.Red);
         }
 
         protected override void UnloadContent()
@@ -94,8 +101,39 @@ namespace gridgame
             {
                 Wurst.move_right();
             }
-            
 
+            //move the enemy
+            Random r = new Random();
+            int x = r.Next(-1, 1);
+            int y = r.Next(-1, 1);
+            switch(x)
+            {
+                case -1:
+                {
+                    enemy.move_left();
+                    break;
+                }
+                case 1:
+                {
+                    enemy.move_right();
+                    break;
+                }
+                default: break;
+            }
+            switch(y)
+            {
+                case -1:
+                {
+                    enemy.move_up();
+                    break;
+                }
+                case 1:
+                {
+                    enemy.move_down();
+                    break;
+                }
+                default: break;
+            }
 
             if( Wurst.collision(Coin) )
 
