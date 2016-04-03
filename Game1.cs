@@ -16,6 +16,7 @@ namespace WindowsGame3
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Grid gamegrid;
         int Height = 20;
         
 
@@ -38,6 +39,7 @@ namespace WindowsGame3
         {
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            gamegrid = new Grid(GraphicsDevice, 30, 30, Height);
             Rechteck.Load(GraphicsDevice);
         }
 
@@ -60,6 +62,11 @@ namespace WindowsGame3
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             Rectangle Size = new Rectangle(0,0,Height,Height);
+            Rectangle grid = new Rectangle(0, 0, gamegrid.pixwidth, gamegrid.pixheight);
+            
+            //Draw the grid
+            spriteBatch.Begin();
+            spriteBatch.Draw(gamegrid.gridtex, grid, Color.White);
 
             spriteBatch.Begin();
             spriteBatch.Draw(Rechteck.Recht,Size, Color.White);
