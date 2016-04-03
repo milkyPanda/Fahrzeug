@@ -153,11 +153,11 @@ namespace gridgame
                 coincounter++;
             }
 
-            /*if (Wurst.collision(enemy))
+            if (Wurst.collision(enemy))
             {
                 Coin.reposition();
                 lose = true;
-            }*/
+            }
             
             if (coincounter >= 10)
             {
