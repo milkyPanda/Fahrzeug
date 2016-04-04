@@ -28,7 +28,7 @@ namespace gridgame
         bool lose = false;
         int coincounter = 0;
         int framecounter = 0;
-
+        int dirrection = 1;
 
         public Game1()
         {
@@ -104,41 +104,39 @@ namespace gridgame
                 Wurst.move_right();
             }
 
+
+
             //move the enemy 3 times per second
-            if(framecounter == 10)
+            if(framecounter == 30)
             {
-                Random r = new Random();
-                int x = r.Next(-1, 1);
-                int y = r.Next(-1, 1);
-                switch(x)
+                if (dirrection == 1)
                 {
-                    case -1:
-                    {
-                        enemy.move_left();
-                        break;
-                    }
-                    case 1:
+                    if (enemy.get_Xpos() < Wurst.get_Xpos())
                     {
                         enemy.move_right();
-                        break;
                     }
-                    default: break;
-                }
-                switch(y)
-                {
-                    case -1:
+                    else if (enemy.get_Xpos() > Wurst.get_Xpos())
                     {
-                        enemy.move_up();
-                        break;
+                        enemy.move_left();
                     }
-                    case 1:
+                    dirrection = 2;
+                }
+
+                if(dirrection == 2)
+                {
+                    if (enemy.get_Ypos() < Wurst.get_Ypos())
                     {
                         enemy.move_down();
-                        break;
                     }
-                    default: break;
+                    else if (enemy.get_Ypos() > Wurst.get_Ypos())
+                    {
+                        enemy.move_up();
+                    }
+                    dirrection = 1;
                 }
-                
+
+
+
                 framecounter = 0;
             }
             else
@@ -178,7 +176,7 @@ namespace gridgame
                 //draw wurst
                 spriteBatch.Draw(Wurst.Recht, new Rectangle(gamegrid.x_pixpos(Wurst.get_Xpos()), gamegrid.y_pixpos(Wurst.get_Ypos()), Wurstbase, Wurstbase), Color.White);
                 //draw enemy
-                spriteBatch.Draw(enemy.Recht, new Rectangle(gamegrid.x_pixpos(enemy.get_Xpos), gamegrid.y_pixpos(enemy.get_Xpos()), Wurstbase, Wurstbase), Color.Red);
+                spriteBatch.Draw(enemy.Recht, new Rectangle(gamegrid.x_pixpos(enemy.get_Xpos()), gamegrid.y_pixpos(enemy.get_Ypos()), Wurstbase, Wurstbase), Color.Red);
                 spriteBatch.End();
             }
             else if (lose == true)
