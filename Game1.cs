@@ -189,6 +189,7 @@ namespace gridgame
                 framecounter++;
             }
 
+
             if( Wurst.collision(Coin) )
 
             {
