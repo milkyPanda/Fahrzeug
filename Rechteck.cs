@@ -17,8 +17,8 @@ namespace gridgame
 	Texture2D Recht;
 	SpriteBatch sprite;
 	Color color;
-        int Xpos;
-        int Ypos;
+        protected int Xpos;
+        protected int Ypos;
         int gridwidth;
         int gridheight;
 	int baselength;
@@ -45,14 +45,9 @@ namespace gridgame
 
         }
 
-        public int get_Xpos()
+        public int[] get_pos()
         {
-            return Xpos;
-        }
-
-        public int get_Ypos()
-        {
-            return Ypos;
+            return new int[] { Xpos, Ypos };
         }
 
 	public void move(InputHandle input, Keys[] controlkeys)
@@ -78,7 +73,7 @@ namespace gridgame
             }
 	}
         
-        public void move_up()
+        protected void move_up()
         {
             if(this.Ypos > 0)
             {
@@ -86,7 +81,7 @@ namespace gridgame
             }
         }
         
-        public void move_down()
+        protected void move_down()
         {
             if(this.Ypos < gridheight-1)
             {
@@ -94,7 +89,7 @@ namespace gridgame
             }
         }
         
-        public void move_left()
+        protected void move_left()
         {
             if(this.Xpos > 0)
             {
@@ -102,7 +97,7 @@ namespace gridgame
             }
         }
         
-        public void move_right()
+        protected void move_right()
         {
             if(this.Xpos < gridwidth-1)
             {
