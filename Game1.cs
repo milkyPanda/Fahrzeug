@@ -29,6 +29,9 @@ namespace gridgame
         int[] coincounter;
         int framecounter = 0;
         int dirrection = 1;
+        int chosen_wurst = 0;
+        int enemy_to_player0;
+        int enemy_to_player1;
 
         public Game1()
         {
@@ -61,7 +64,8 @@ namespace gridgame
             this.spriteBatch = new SpriteBatch(GraphicsDevice);
             this.gamegrid = new Grid(GraphicsDevice, gridwidth, gridheight, Wurstbase);
             this.es_mi_regal = new InputHandle();
-            
+
+
             //create and load wurst
             this.Wurst = new Rechteck[2];
 	        this.Wurst[0] = new Rechteck(14, 14, gridwidth, gridheight, Wurstbase, spriteBatch, Color.White);
@@ -96,6 +100,19 @@ namespace gridgame
 	        Wurst[0].move(es_mi_regal, keys[0]);
 	        Wurst[1].move(es_mi_regal, keys[1]);
 
+            enemy_to_player0 = Formeln.distance(enemy.get_Xpos() - Wurst[0].get_Xpos(), enemy.get_Ypos() - Wurst[0].get_Ypos());
+            enemy_to_player1 = Formeln.distance(enemy.get_Xpos() - Wurst[1].get_Xpos(), enemy.get_Ypos() - Wurst[1].get_Ypos());
+
+            if (enemy_to_player0 < enemy_to_player1)
+            {
+                chosen_wurst = 0;
+            }
+            else
+            {
+                chosen_wurst = 1;
+            }
+
+
             if(!win[0] && !win[1])
             {
                 //move the enemy 3 times per second
@@ -103,12 +120,12 @@ namespace gridgame
                 {
                     if (dirrection == 1)
                     {
-                        if (enemy.get_Xpos() < Wurst[0].get_Xpos())
+                        if (enemy.get_Xpos() < Wurst[chosen_wurst].get_Xpos())
 
                         {
                             enemy.move_right();
                         }
-                        else if (enemy.get_Xpos() > Wurst[0].get_Xpos())
+                        else if (enemy.get_Xpos() > Wurst[chosen_wurst].get_Xpos())
                         {
                             enemy.move_left();
                         }
@@ -118,13 +135,13 @@ namespace gridgame
 
                     if(dirrection == 2)
                     {
-                        if (enemy.get_Ypos() < Wurst[0].get_Ypos())
+                        if (enemy.get_Ypos() < Wurst[chosen_wurst].get_Ypos())
 
                         {
                             enemy.move_down();
                         }
 
-                        else if (enemy.get_Ypos() > Wurst[0].get_Ypos())
+                        else if (enemy.get_Ypos() > Wurst[chosen_wurst].get_Ypos())
 
                         {
                             enemy.move_up();
@@ -166,11 +183,11 @@ namespace gridgame
                 }
             }
             
-            if (coincounter[0] >= 2)
+            if (coincounter[0] >= 5)
             {
                 win[0] = true;
             }
-	        if (coincounter[1] >= 2)
+	        if (coincounter[1] >= 5)
 	        {
 		        win[1] = true;
 	        }
