@@ -14,30 +14,34 @@ namespace gridgame
     public class Rechteck
     {
 
-        public Texture2D Recht; 
+	Texture2D Recht;
+	SpriteBatch sprite;
+	Color color;
         int Xpos;
         int Ypos;
         int gridwidth;
         int gridheight;
+	int baselength;
         public int lastmove;
 
 
-        public Rechteck(int Xpos, int Ypos, int gridwidth, int gridheight)
+        public Rechteck(int Xpos, int Ypos, int gridwidth, int gridheight, int baselen, SpriteBatch s, Color col)
         {
             this.Xpos = Xpos;
             this.Ypos = Ypos;
             this.gridwidth = gridwidth;
             this.gridheight = gridheight;
+		this.baselength = baselen;
+		this.sprite = s;
+		this.color = col;
         }   
 
 
 
-        public void Load(GraphicsDevice GD, Color Colo)
+        public void Load(GraphicsDevice GD)
         {
             Recht = new Texture2D(GD, 1, 1);
-            Color[] Col = new Color[1];
-            Col[0] = Colo;
-            Recht.SetData(Col);
+            Recht.SetData(new Color[] {this.color});
 
         }
 
@@ -51,6 +55,28 @@ namespace gridgame
             return Ypos;
         }
 
+	public void move(InputHandle input, Keys[] controlkeys)
+	{
+            if (input.wasKeyPressed(controlkeys[0]) )
+            {
+                Wurst.move_up();
+            }
+
+            if (input.wasKeyPressed(controlkeys[1]) )
+            {
+                Wurst.move_right();
+            }
+
+            if (input.wasKeyPressed(controlkeys[2]) ){
+            
+                Wurst.move_down();
+            }
+
+            if (input.wasKeyPressed(controlkeys[3]) )
+            {
+                Wurst.move_left();
+            }
+	}
         
         public void move_up()
         {
@@ -99,5 +125,12 @@ namespace gridgame
             this.Xpos = r.Next(0, 15);
             this.Ypos = r.Next(0, 15);
         }
+
+	public void Draw()
+	{
+	    this.sprite.Begin();
+	    this.sprite.Draw(Recht, new Rectangle(Xpos*baselength, Ypos*baselength, baselength, baselength), this.color)
+	    this.sprite.End();
+	}
     }
 }

@@ -59,15 +59,5 @@ namespace gridgame
         {
             return pixheight;
         }
-        
-        public int x_pixpos(int grid_x_pos)
-        {
-            return grid_x_pos * fieldwidth;
-        }
-        
-        public int y_pixpos(int grid_y_pos)
-        {
-            return grid_y_pos * fieldwidth;
-        }
     }
 }

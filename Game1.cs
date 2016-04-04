@@ -17,7 +17,8 @@ namespace gridgame
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         InputHandle es_mi_regal;
-        Rechteck Wurst;
+        Rechteck[] Wurst;
+	Keys[][] keys;
         Rechteck Coin;
         Rechteck enemy;
         Grid gamegrid;
@@ -26,7 +27,7 @@ namespace gridgame
         int Wurstbase = 20;
         bool win = false;
         bool lose = false;
-        int coincounter = 0;
+        int[] coincounter;
         int framecounter = 0;
 
 
@@ -40,12 +41,16 @@ namespace gridgame
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
 
+	    keys = new Keys[2][];
+	    keys[0] = new Keys[] {Keys.W, Keys.D, Keys.S, Keys.A};
+	    keys[1] = new Keys[] {Keys.ArrowUp, Keys.ArrowRight, Keys.ArrowDown, Keys.ArrowLeft};
+
+	    coincounter = new int[] {0, 0};
         }
 
 
         protected override void Initialize()
         {
-
             base.Initialize();
         }
 
@@ -57,17 +62,20 @@ namespace gridgame
             this.es_mi_regal = new InputHandle();
             
             //create and load wurst
-            this.Wurst = new Rechteck(14,14,gridwidth,gridheight);
-            Wurst.Load(GraphicsDevice,Color.White);
+            this.Wurst = new Rechteck[2];
+	    this.Wurst[0] = new Rechteck(14, 14, gridwidth, gridheight, Wurstbase, spriteBatch, Color.White);
+	    this.Wurst[1] = new Rechteck(7, 7, gridwidth, gridheight, Wurstbase, spriteBatch, Color.Blue);
+            Wurst[0].Load(GraphicsDevice);
+            Wurst[1].Load(GraphicsDevice);
 
             //create and load coin
             Random r = new Random();
-            this.Coin = new Rechteck(r.Next(0, 15), r.Next(0, 15), gridwidth, gridheight);
-            Coin.Load(GraphicsDevice, Color.Yellow);
+            this.Coin = new Rechteck(r.Next(0, 15), r.Next(0, 15), gridwidth, gridheight, Wurstbase, spriteBatch, Color.Yellow);
+            Coin.Load(GraphicsDevice);
             
             //create and load enemy
-            this.enemy = new Rechteck(r.Next(0, 15), r.Next(0, 15), gridwidth, gridheight);
-            enemy.Load(GraphicsDevice, Color.Red);
+            this.enemy = new Rechteck(r.Next(0, 15), r.Next(0, 15), gridwidth, gridheight, Wurstbase, spriteBatch, Color.Red);
+            enemy.Load(GraphicsDevice);
         }
 
         protected override void UnloadContent()
@@ -84,25 +92,8 @@ namespace gridgame
             es_mi_regal.Update();
             
             //Check if the Wurst needs to be moved
-            if (es_mi_regal.wasKeyPressed(Keys.W) )
-            {
-                Wurst.move_up();
-            }
-
-            if (es_mi_regal.wasKeyPressed(Keys.S) )
-            {
-                Wurst.move_down();
-            }
-
-            if (es_mi_regal.wasKeyPressed(Keys.A) ){
-            
-                Wurst.move_left();
-            }
-
-            if (es_mi_regal.wasKeyPressed(Keys.D) )
-            {
-                Wurst.move_right();
-            }
+	    Wurst[0].move(es_mi_regal, keys[0]);
+	    Wurst[1].move(es_mi_regal, keys[1]);
 
             //move the enemy 3 times per second
             if(framecounter == 10)
@@ -189,44 +180,66 @@ namespace gridgame
                 framecounter++;
             }
 
-            if( Wurst.collision(Coin) )
-
+	    //check if either Wurst collided with coin
+	    if(Wurst[0].collision(Coin) )
+	    {
+		Coin.reposition();
+		coincounter[0]++;
+	    }
+            if( Wurst[1].collision(Coin) )
             {
                 Coin.reposition();
-                coincounter++;
+                coincounter[1]++;
             }
 
-            if (Wurst.collision(enemy))
+	    //check if either Wurst collided with enemy
+            if (Wurst[0].collision(enemy))
             {
-                lose = true;
+                lose[0] = true;
             }
+	    if (Wurst[1].collision(enemy))
+	    {
+		lose[1] = true;
+	    }
             
-            if (coincounter >= 10)
+            if (coincounter[0] >= 10)
             {
-                win = true;
+                win[0] = true;
             }
+	    if (coincounter[1] >= 10)
+	    {
+		win[1] = true;
+	    }
+
+	    //Update gameTime in base class
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            if (!lose && !win)
+            if (!lose[0] && !lose[1] && !win[0] && !win[1])
             {
-                spriteBatch.Begin();
-                //draw grid
+		//draw grid
+		spriteBatch.Begin();
                 spriteBatch.Draw(gamegrid.get_grid(), new Rectangle(0, 0, gamegrid.pixWidth(), gamegrid.pixHeight()), Color.Black);
+		spriteBatch.End();
                 //draw coin
-                spriteBatch.Draw(Coin.Recht, new Rectangle(gamegrid.x_pixpos(Coin.get_Xpos()), gamegrid.y_pixpos(Coin.get_Ypos()), Wurstbase, Wurstbase), Color.Yellow);
+		Coin.draw();
                 //draw wurst
-                spriteBatch.Draw(Wurst.Recht, new Rectangle(gamegrid.x_pixpos(Wurst.get_Xpos()), gamegrid.y_pixpos(Wurst.get_Ypos()), Wurstbase, Wurstbase), Color.White);
+		Wurst[0].draw();
+		Wurst[1].draw();
                 //draw enemy
-                spriteBatch.Draw(enemy.Recht, new Rectangle(gamegrid.x_pixpos(enemy.get_Xpos()), gamegrid.y_pixpos(enemy.get_Ypos()), Wurstbase, Wurstbase), Color.Red);
-                spriteBatch.End();
+		enemy.draw();
             }
-            else if (lose == true)
+            else if (lose[0] == true)
             {
                 GraphicsDevice.Clear(Color.Red);
+		Wurst[1].Draw();
             }
+	    else if (lose[1] == true)
+	    {
+                GraphicsDevice.Clear(Color.Red);
+	    }
             else
             {
                 GraphicsDevice.Clear(Color.Green);
