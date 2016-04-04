@@ -16,24 +16,36 @@ namespace gridgame
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+		int windowwidth;
+		int windowheight;
+
         InputHandle es_mi_regal;
+
+		Button singlep;
+		Button multip;
+
+        Grid gamegrid;
         Rechteck[] Wurst;
-	Keys[][] keys;
+		Keys[][] keys;
         Rechteck Coin;
         Rechteck enemy;
-        Grid gamegrid;
+
         int gridwidth;
         int gridheight;
         int Wurstbase = 20;
+
         bool[] win;
         int[] coincounter;
         int framecounter = 0;
         int dirrection = 1;
+		gamemode = 0;		//0 = startscreen, 1 = singleplayer, 2 = multiplayer
 
         public Game1()
         {
             gridwidth = 15;
+			windowwidth = gridwidth * Wurstbase;
             gridheight = 15;
+			windowheight = gridheight * Wurstbase;
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferHeight = Wurstbase * gridheight;
             graphics.PreferredBackBufferWidth = Wurstbase * gridwidth;
@@ -57,10 +69,17 @@ namespace gridgame
 
         protected override void LoadContent()
         {
-            
             this.spriteBatch = new SpriteBatch(GraphicsDevice);
             this.gamegrid = new Grid(GraphicsDevice, gridwidth, gridheight, Wurstbase);
             this.es_mi_regal = new InputHandle();
+
+			//create buttons
+			int[] pos = new int[2];
+			pos[0] = (windowwidth-100) / 2;
+			pos[1] = windowwidth/2 + windowwidth/6 + 20;
+			singlep = new Button(pos, 100, 20, Color.Green, Color.Blue, true);
+			pos[1] = windowwidth/2 - windowwidth/6 - 20;
+			multip = new Button(pos, 100, 20, Color.Green, Color.Blue, false);
             
             //create and load wurst
             this.Wurst = new Rechteck[2];
@@ -90,90 +109,151 @@ namespace gridgame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
+			//update Input data
             es_mi_regal.Update();
-            
-            //Check if the Wurst needs to be moved
-	        Wurst[0].move(es_mi_regal, keys[0]);
-	        Wurst[1].move(es_mi_regal, keys[1]);
 
-            if(!win[0] && !win[1])
-            {
-                //move the enemy 3 times per second
-                if(framecounter == 30)
-                {
-                    if (dirrection == 1)
-                    {
-                        if (enemy.get_Xpos() < Wurst[0].get_Xpos())
+			if(gamemode == 0)		//start screen
+			{
+				if(es_mi_regal.wasKeyPressed(Keys.Up) && !singlep.is_active() )
+				{
+					singlep.activate();
+					multip.deactivate();
+				}
+				else if(es_mi_regal.wasKeyPressed(Keys.Down) && !multip.is_active() )
+				{
+					multip.activate();
+					singlep.deactivate();
+				}
+				else if(es_mi_regal.wasKeyPressed(Keys.Enter) )
+				{
+					if(singlep.is_active() )
+					{
+						gamemode = 1;
+					}
+					else if(multip.is_active() )
+					{
+						gamemode = 2;
+					}
+					else
+					{
+						//ERROR
+					}
+				}
+			}	//end start screen
 
-                        {
-                            enemy.move_right();
-                        }
-                        else if (enemy.get_Xpos() > Wurst[0].get_Xpos())
-                        {
-                            enemy.move_left();
-                        }
+			if(gamemode == 1)		//singleplayer mode
+			{
+				//update first Wurst
+				Wurst[0].move(es_mi_regal, keys[0]);
 
-                        dirrection = 2;
-                    }
+				if(!win[0])
+		        {
+		            //move the enemy 3 times per second
+		            if(framecounter == 30)
+		            {
+		                if (dirrection == 1)
+		                {
+		                    if (enemy.get_Xpos() < Wurst[0].get_Xpos())
 
-                    if(dirrection == 2)
-                    {
-                        if (enemy.get_Ypos() < Wurst[0].get_Ypos())
+		                    {
+		                        enemy.move_right();
+		                    }
+		                    else if (enemy.get_Xpos() > Wurst[0].get_Xpos())
+		                    {
+		                        enemy.move_left();
+		                    }
 
-                        {
-                            enemy.move_down();
-                        }
+		                    dirrection = 2;
+		                }
 
-                        else if (enemy.get_Ypos() > Wurst[0].get_Ypos())
+		                if(dirrection == 2)
+		                {
+		                    if (enemy.get_Ypos() < Wurst[0].get_Ypos())
 
-                        {
-                            enemy.move_up();
-                        }
+		                    {
+		                        enemy.move_down();
+		                    }
 
-                        dirrection = 1;
-                    }
+		                    else if (enemy.get_Ypos() > Wurst[0].get_Ypos())
 
-                    framecounter = 0;
-                }
-                else
-                {
-                    framecounter++;
-                }
-            }
+		                    {
+		                        enemy.move_up();
+		                    }
 
-	        //check if either Wurst collided with coin
-	        if(Wurst[0].collision(Coin) )
-	        {
-		        Coin.reposition();
-		        coincounter[0]++;
-	        }
-            if( Wurst[1].collision(Coin) )
-            {
-                Coin.reposition();
-                coincounter[1]++;
-            }
+		                    dirrection = 1;
+		                }
 
-            if (!win[0] && !win[1])
-            {
-                //check if either Wurst collided with enemy
-                if (Wurst[0].collision(enemy))
-                {
-                    win[1] = true;
-                }
-                if (Wurst[1].collision(enemy))
-                {
-                    win[0] = true;
-                }
-            }
-            
-            if (coincounter[0] >= 2)
-            {
-                win[0] = true;
-            }
-	        if (coincounter[1] >= 2)
-	        {
-		        win[1] = true;
-	        }
+		                framecounter = 0;
+		            }
+		            else
+		            {
+		                framecounter++;
+		            }
+
+					//check if Wurst collided with coin
+					if(Wurst[0].collision(Coin) )
+					{
+						Coin.reposition();
+						coincounter[0]++;
+					}
+
+		            //check if Wurst collided with enemy
+		            if (Wurst[0].collision(enemy))
+		            {
+		                win[1] = true;
+		            }
+		        
+				    if (coincounter[0] >= 2)
+				    {
+				        win[0] = true;
+				    }
+		        }	//end !win
+			}	//end singleplayer mode
+
+			if(gamemode == 2)		//multiplayer mode
+			{
+		        //Check if either Wurst needs to be moved
+				Wurst[0].move(es_mi_regal, keys[0]);
+				Wurst[1].move(es_mi_regal, keys[1]);
+
+				//milkyPanda's enemy movement should go in here (simplify:
+					//create a class enemy, derived from Rechteck, with its own override move method that
+					//takes positions of both players as arguments
+
+			    //check if either Wurst collided with coin
+			    if(Wurst[0].collision(Coin) )
+			    {
+				    Coin.reposition();
+				    coincounter[0]++;
+			    }
+		        if( Wurst[1].collision(Coin) )
+		        {
+		            Coin.reposition();
+		            coincounter[1]++;
+		        }
+
+		        if (!win[0] && !win[1])
+		        {
+		            //check if either Wurst collided with enemy
+		            if (Wurst[0].collision(enemy))
+		            {
+		                win[1] = true;
+		            }
+		            if (Wurst[1].collision(enemy))
+		            {
+		                win[0] = true;
+		            }
+		        }
+		        
+		        if (coincounter[0] >= 2)
+		        {
+		            win[0] = true;
+		        }
+			    if (coincounter[1] >= 2)
+			    {
+				    win[1] = true;
+			    }
+			}	//end multiplayer mode
 
 	        //Update gameTime in base class
             base.Update(gameTime);
@@ -181,6 +261,11 @@ namespace gridgame
 
         protected override void Draw(GameTime gameTime)
         {
+			if(gamemode == 0)
+			{
+				singlep.draw();
+				multip.draw();
+			}
             if (!win[0] && !win[1])
             {
 		        //draw grid
