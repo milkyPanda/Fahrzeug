@@ -29,7 +29,7 @@ namespace gridgame
         bool lose = false;
         int[] coincounter;
         int framecounter = 0;
-
+        int dirrection = 1;
 
         public Game1()
         {
@@ -95,84 +95,46 @@ namespace gridgame
 	    Wurst[0].move(es_mi_regal, keys[0]);
 	    Wurst[1].move(es_mi_regal, keys[1]);
 
-            //move the enemy 3 times per second
-            if(framecounter == 10)
-            {
-                int move;
-                bool again = false;
 
-                Random X = new Random();
-                do
+
+            //move the enemy 3 times per second
+            if(framecounter == 30)
+            {
+
+                if (dirrection == 1)
                 {
-                    move = X.Next(-1, 8);
-                    if (move % 2 == 0)  //even number
-                    {
-                        if (enemy.lastmove == move+1)
-                        {
-                            again = true;
-                        }
-                        else again = false;
-                    }
-                    if (move % 2 == 1)
-                    {
-                        if (enemy.lastmove == move - 1)
-                        {
-                            again = true;
-                        }
-                        else again = false;
-                    }
-                }
-                while (again);
-                enemy.lastmove = move;
-                switch(move)
-                {
-                    case 0:
-                    {
-                        enemy.move_left();
-                        break;
-                    }
-                    case 1:
+                    if (enemy.get_Xpos() < Wurst.get_Xpos())
+
                     {
                         enemy.move_right();
-                        break;
                     }
-                    case 2:
+                    else if (enemy.get_Xpos() > Wurst.get_Xpos())
                     {
-                        enemy.move_up();
-                        break;
+                        enemy.move_left();
                     }
-                    case 3:
+
+                    dirrection = 2;
+                }
+
+                if(dirrection == 2)
+                {
+                    if (enemy.get_Ypos() < Wurst.get_Ypos())
+
                     {
                         enemy.move_down();
-                        break;
                     }
-                    case 4:
+
+                    else if (enemy.get_Ypos() > Wurst.get_Ypos())
+
                     {
-                        enemy.move_left();
                         enemy.move_up();
-                        break;
                     }
-                    case 5:
-                    {
-                        enemy.move_right();
-                        enemy.move_down();
-                        break;
-                    }
-                    case 6:
-                    {
-                        enemy.move_right();
-                        enemy.move_up();
-                        break;
-                    }
-                    case 7:
-                    {
-                        enemy.move_left();
-                        enemy.move_up();
-                        break;
-                    }
-                    default: break;
+
+                    dirrection = 1;
                 }
-                
+
+
+
                 framecounter = 0;
             }
             else
