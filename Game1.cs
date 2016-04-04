@@ -116,7 +116,7 @@ namespace gridgame
             if(!win[0] && !win[1])
             {
                 //move the enemy 3 times per second
-                if(framecounter == 30)
+                if(framecounter == 20)
                 {
                     if (dirrection == 1)
                     {
