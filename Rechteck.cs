@@ -59,22 +59,22 @@ namespace gridgame
 	{
             if (input.wasKeyPressed(controlkeys[0]) )
             {
-                Wurst.move_up();
+                this.move_up();
             }
 
             if (input.wasKeyPressed(controlkeys[1]) )
             {
-                Wurst.move_right();
+                this.move_right();
             }
 
             if (input.wasKeyPressed(controlkeys[2]) ){
-            
-                Wurst.move_down();
+
+                this.move_down();
             }
 
             if (input.wasKeyPressed(controlkeys[3]) )
             {
-                Wurst.move_left();
+                this.move_left();
             }
 	}
         
@@ -126,10 +126,10 @@ namespace gridgame
             this.Ypos = r.Next(0, 15);
         }
 
-	public void Draw()
+	public void draw()
 	{
 	    this.sprite.Begin();
-	    this.sprite.Draw(Recht, new Rectangle(Xpos*baselength, Ypos*baselength, baselength, baselength), this.color)
+        this.sprite.Draw(Recht, new Rectangle(Xpos * baselength, Ypos * baselength, baselength, baselength), this.color);
 	    this.sprite.End();
 	}
     }
